@@ -1,0 +1,22 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "8.1.0"
+}
+
+
+dependencies {
+    shadow(project(path: ":nms:shared", configuration: "apiElements"))
+    shadow(project(path: ":nms:v1_19_R3", configuration: "reobf"))
+}
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+
+    relocate("kotlin", "ca.bungo.template.shaded.kotlin")
+
+    setArchiveBaseName("Mountable")
+    setArchiveClassifier("")
+}
+
+artifacts {
+    archives shadowJar
+}

@@ -1,0 +1,10 @@
+#Change the mount speeds here! By default I think it is blocks per second?
+#Hard to say exact speeds. Just change it, reload, test it, find what works best!
+speed: 3
+
+#Controlling Item.
+#As long as the player holds this item in their off hand or main hand the mount will move in the direction
+#that they are looking!
+#Defaults to Bamboo
+#Can't use WASD controls without breaking A LOT of movement systems built into the game.. (like gravity)
+control-item: BAMBOO

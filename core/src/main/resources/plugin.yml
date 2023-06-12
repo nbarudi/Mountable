@@ -1,0 +1,5 @@
+name: ${projectName}
+version: ${version}
+main: ${main}
+api-version: 1.19
+authors: [Bungo]
