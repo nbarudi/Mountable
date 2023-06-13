@@ -1,10 +1,13 @@
-#Change the mount speeds here! By default I think it is blocks per second?
-#Hard to say exact speeds. Just change it, reload, test it, find what works best!
-speed: 3
-
-#Controlling Item.
-#As long as the player holds this item in their off hand or main hand the mount will move in the direction
-#that they are looking!
-#Defaults to Bamboo
-#Can't use WASD controls without breaking A LOT of movement systems built into the game.. (like gravity)
-control-item: BAMBOO
+#List if different entities who should be considered mounts
+#In general the format should be the following:
+#  panda-mount: # Mount name, Can be anything but must be unique
+#    entity: PANDA #The entity type for the point. Must relate to a Bukkit EntityType of some kind
+#    speed: 5 #The speed for this mount entity.
+#    control-item: bamboo #The item that this entity will wait for a player to hold to move
+#    mount-item: bamboo #The item that a player must right-click with to mount.
+mounts:
+  panda-mount:
+    entity: PANDA
+    speed: 5
+    control-item: bamboo
+    mount-item: bamboo

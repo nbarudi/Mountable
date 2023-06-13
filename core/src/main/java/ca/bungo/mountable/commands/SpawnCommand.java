@@ -1,7 +1,6 @@
 package ca.bungo.mountable.commands;
 
 import ca.bungo.mountable.Mountable;
-import ca.bungo.mountable.manager.MountManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -28,10 +27,10 @@ public class SpawnCommand extends Command {
         String entityType = args[0];
         EntityType type = EntityType.valueOf(entityType.toUpperCase());
 
-        Entity entity = player.getWorld().spawnEntity(player.getLocation(), type);
-        MountManager.addMount(entity);
+        //Entity entity = player.getWorld().spawnEntity(player.getLocation(), type);
+        //MountManager.addMount(entity);
 
-        Mountable.getInstance().abstractedHandler.addMountPathfinder(entity, player);
+        //Mountable.getInstance().abstractedHandler.addMountPathfinder(entity, player);
 
         sender.sendMessage("Your mount has been spawned!");
         return false;

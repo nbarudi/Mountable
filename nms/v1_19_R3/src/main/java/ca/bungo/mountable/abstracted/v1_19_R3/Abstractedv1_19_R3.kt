@@ -10,21 +10,22 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftEntity
 import org.bukkit.entity.Entity
+import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 
 class Abstractedv1_19_R3(private val link: AbstractedLink) : AbstractedHandler(link) {
 
 
-    override fun addMountPathfinder(entity: Entity?, player: org.bukkit.entity.Player) {
+    override fun addMountPathfinder(entity: Entity?, player: org.bukkit.entity.Player, heldItem: Material, speed: Double) {
         val nmsEntity: net.minecraft.world.entity.Entity = (entity as CraftEntity).handle
         if(nmsEntity !is PathfinderMob) return
 
-        nmsEntity.goalSelector.addGoal(0, MountableGoal(nmsEntity, link))
+        nmsEntity.goalSelector.addGoal(0, MountableGoal(nmsEntity, link, heldItem, speed))
     }
 
 
-    class MountableGoal(mob: PathfinderMob, private val link: AbstractedLink) : Goal() {
-        private var timeToRecalcPath = 0
+    class MountableGoal(mob: PathfinderMob, private val link: AbstractedLink,
+                        private val heldItem: Material, private val speed: Double) : Goal() {
         private val pathfinder = mob
         private var player: org.bukkit.entity.Player? = null
 
@@ -36,13 +37,8 @@ class Abstractedv1_19_R3(private val link: AbstractedLink) : AbstractedHandler(l
                     if(player !is org.bukkit.entity.Player)
                         return false
                     this.player = player
-                    val controller = link.instance.config.getString("control-item")
-                    if(controller != null) {
-                        val controller = Material.valueOf(controller.uppercase())
-                        if(player.inventory.itemInMainHand.type == controller || player.inventory.itemInOffHand.type == controller)
-                            return true
-                        return false
-                    }
+                    if(player.inventory.itemInMainHand.type == heldItem || player.inventory.itemInOffHand.type == heldItem)
+                        return true
                     return false
                 }
                 return false
@@ -66,7 +62,7 @@ class Abstractedv1_19_R3(private val link: AbstractedLink) : AbstractedHandler(l
 
         override fun start() {
             val vector = getVector()
-            this.pathfinder.navigation.moveTo(vector.x, vector.y, vector.z, pathfinder.speed.toDouble())
+            this.pathfinder.navigation.moveTo(vector.x, vector.y, vector.z, speed)
         }
 
         override fun canContinueToUse(): Boolean {
@@ -78,7 +74,6 @@ class Abstractedv1_19_R3(private val link: AbstractedLink) : AbstractedHandler(l
             if(player == null)
                 return
             val location = player!!.location.add(vector.multiply(2))
-            val speed = link.instance.config.getDouble("speed")
             this.pathfinder.navigation.moveTo(location.x, location.y, location.z, speed)
         }
 

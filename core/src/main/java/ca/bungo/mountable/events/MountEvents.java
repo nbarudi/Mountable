@@ -1,55 +1,81 @@
 package ca.bungo.mountable.events;
 
 import ca.bungo.mountable.Mountable;
-import ca.bungo.mountable.manager.MountManager;
-import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.util.Vector;
+import org.bukkit.inventory.PlayerInventory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MountEvents implements Listener {
 
-    @EventHandler
-    public void onTick(ServerTickEndEvent event){
-        return;
-        /*
-        for(Entity ent : MountManager.mountList){
-            if(ent.getPassengers().size() == 0) continue;
-            if(!(ent.getPassengers().get(0) instanceof Player player)) continue;
+    private Map<EntityType, MountableType> mount = new HashMap<>();
 
-            Material controller = Material.BAMBOO;
+    class MountableType{
+        public EntityType entityType;
+        public double speed;
+        public Material controlItem;
+        public Material mountItem;
+    }
 
-            String materialName = Mountable.getInstance().getConfig().getString("control-item");
-            if(materialName != null)
-                controller = Material.valueOf(materialName.toUpperCase());
+    public MountEvents(){
 
+        FileConfiguration config = Mountable.getInstance().getConfig();
 
-            if(player.getInventory().getItemInMainHand().getType().equals(controller)
-                    || player.getInventory().getItemInOffHand().getType().equals(controller)){
+        if(config.getConfigurationSection("mounts") == null) return;
 
-                Vector direction = player.getLocation().getDirection();
-                direction.setY(-1);
+        for(String key : config.getConfigurationSection("mounts").getKeys(false)){
+            ConfigurationSection section = config.getConfigurationSection("mounts." + key);
 
-                double multiplier = 0.5;
-                if(Mountable.getInstance().getConfig().getDouble("speed-multiplier") != 0)
-                    multiplier = Mountable.getInstance().getConfig().getDouble("speed-multiplier");
+            String _entityType = section.getString("entity");
+            double speed = section.getDouble("speed");
+            String _controlItemType = section.getString("control-item");
+            String _mountItemType = section.getString("mount-item");
 
-                ent.setVelocity(direction.multiply(multiplier));
-                ent.getLocation().setDirection(direction);
-            }
-        }*/
+            EntityType entityType = EntityType.valueOf(_entityType.toUpperCase());
+
+            Material controlItem = Material.valueOf(_controlItemType.toUpperCase());
+            Material mountItem = Material.valueOf(_mountItemType.toUpperCase());
+
+            MountableType type = new MountableType();
+            type.controlItem = controlItem;
+            type.entityType = entityType;
+            type.mountItem = mountItem;
+            type.speed = speed;
+
+            mount.put(entityType, type);
+
+        }
+
     }
 
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent event){
-        if(MountManager.isMount(event.getRightClicked()) && event.getRightClicked().getPassengers().size() == 0){
-            event.getRightClicked().addPassenger(event.getPlayer());
+        PlayerInventory inventory = event.getPlayer().getInventory();
+        Entity entity = event.getRightClicked();
+
+        if(mount.containsKey(entity.getType())){
+
+            MountableType mountableType = mount.get(entity.getType());
+
+            if(inventory.getItemInMainHand().getType().equals(mountableType.mountItem)
+                    || inventory.getItemInOffHand().getType().equals(mountableType.mountItem)){
+                entity.addPassenger(event.getPlayer());
+                Mountable.getInstance().abstractedHandler.addMountPathfinder(entity, event.getPlayer(),
+                        mountableType.controlItem,
+                        mountableType.speed);
+            }
+
         }
+
+
     }
 
 }

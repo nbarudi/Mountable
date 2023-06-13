@@ -40,7 +40,7 @@ public final class Mountable extends JavaPlugin {
     }
 
     private void registerCommands(){
-        this.getServer().getCommandMap().register("mountable", new SpawnCommand("mount"));
+        //this.getServer().getCommandMap().register("mountable", new SpawnCommand("mount"));
     }
     private void registerEvents(){
         this.getServer().getPluginManager().registerEvents(new MountEvents(), this);
