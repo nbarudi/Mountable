@@ -1,16 +1,13 @@
-package ca.bungo.mountable.abstracted.v1_19_R3
+package ca.bungo.mountable.abstracted.v1_20_R1
 
 import ca.bungo.mountable.abstracted.AbstractedHandler
 import ca.bungo.mountable.abstracted.AbstractedLink
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.goal.Goal
 import net.minecraft.world.entity.player.Player
-import org.bukkit.Bukkit
-import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity
 import org.bukkit.entity.Entity
-import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 
 class Abstractedv1_20_R1(private val link: AbstractedLink) : AbstractedHandler(link) {

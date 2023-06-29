@@ -12,7 +12,7 @@ dependencies {
 shadowJar {
     configurations = [project.configurations.shadow]
 
-    relocate("kotlin", "ca.bungo.template.shaded.kotlin")
+    relocate("kotlin", "ca.bungo.mountable.shaded.kotlin")
 
     setArchiveBaseName("Mountable")
     setArchiveClassifier("")
