@@ -71,6 +71,7 @@ public class MountEvents implements Listener {
                 Mountable.getInstance().abstractedHandler.addMountPathfinder(entity, event.getPlayer(),
                         mountableType.controlItem,
                         mountableType.speed);
+                event.setCancelled(true);
             }
 
         }
