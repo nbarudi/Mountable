@@ -1,0 +1,5 @@
+name: Mountable
+version: 1.3
+main: ca.bungo.mountable.Mountable
+api-version: 1.19
+authors: [Bungo]

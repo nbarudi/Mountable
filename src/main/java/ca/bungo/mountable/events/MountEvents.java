@@ -68,7 +68,7 @@ public class MountEvents implements Listener {
             if(inventory.getItemInMainHand().getType().equals(mountableType.mountItem)
                     || inventory.getItemInOffHand().getType().equals(mountableType.mountItem)){
                 entity.addPassenger(event.getPlayer());
-                Mountable.getInstance().abstractedHandler.addMountPathfinder(entity, event.getPlayer(),
+                Mountable.getInstance().mountController.addMountPathfinder(entity, event.getPlayer(),
                         mountableType.controlItem,
                         mountableType.speed);
                 event.setCancelled(true);
