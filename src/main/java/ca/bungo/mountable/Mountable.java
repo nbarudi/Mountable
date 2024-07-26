@@ -21,6 +21,7 @@ public final class Mountable extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         instance = this;
+        this.mountController = new MountController();
 
         this.saveDefaultConfig();
 
